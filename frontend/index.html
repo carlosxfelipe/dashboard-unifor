@@ -88,7 +88,7 @@
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand ms-3" href="#">Sistema de Agendamentos</a>
             <button
-              class="navbar-toggler"
+              class="navbar-toggler me-3"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarNav"
@@ -374,34 +374,69 @@
                 Nenhum agendamento
                 encontrado${buscaUsuario ? " para essa busca" : ""}.
               </div>`}
-              ${agendamentosFiltrados.map(
-                (ag) => html`
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Agendamento #${ag.id}</h5>
-                      <p class="card-text">
-                        <strong>Data:</strong> ${ag.data}<br />
-                        <strong>Hora:</strong> ${ag.hora}<br />
-                        <strong>Status:</strong> ${ag.status}<br />
-                        <strong>Usuário:</strong> ${nomeUsuario(ag.usuarioId)}
-                        (ID: ${ag.usuarioId})
-                      </p>
-                      <button
-                        class="btn btn-warning btn-sm me-2"
-                        onClick=${() => onEdit(ag)}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        class="btn btn-danger btn-sm"
-                        onClick=${() => onDelete(ag.id)}
-                      >
-                        Excluir
-                      </button>
-                    </div>
-                  </div>
-                `
-              )}
+              ${editing
+                ? agendamentosFiltrados
+                    .filter((ag) => ag.id == form.id)
+                    .map(
+                      (ag) => html`
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Agendamento #${ag.id}</h5>
+                            <p class="card-text">
+                              <strong>Data:</strong> ${ag.data}<br />
+                              <strong>Hora:</strong> ${ag.hora}<br />
+                              <strong>Status:</strong> ${ag.status}<br />
+                              <strong>Usuário:</strong> ${nomeUsuario(
+                                ag.usuarioId
+                              )}
+                              (ID: ${ag.usuarioId})
+                            </p>
+                            <button
+                              class="btn btn-warning btn-sm me-2"
+                              onClick=${() => onEdit(ag)}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              class="btn btn-danger btn-sm"
+                              onClick=${() => onDelete(ag.id)}
+                            >
+                              Excluir
+                            </button>
+                          </div>
+                        </div>
+                      `
+                    )
+                : agendamentosFiltrados.map(
+                    (ag) => html`
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Agendamento #${ag.id}</h5>
+                          <p class="card-text">
+                            <strong>Data:</strong> ${ag.data}<br />
+                            <strong>Hora:</strong> ${ag.hora}<br />
+                            <strong>Status:</strong> ${ag.status}<br />
+                            <strong>Usuário:</strong> ${nomeUsuario(
+                              ag.usuarioId
+                            )}
+                            (ID: ${ag.usuarioId})
+                          </p>
+                          <button
+                            class="btn btn-warning btn-sm me-2"
+                            onClick=${() => onEdit(ag)}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            class="btn btn-danger btn-sm"
+                            onClick=${() => onDelete(ag.id)}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </div>
+                    `
+                  )}
             </div>
           </div>
         `;
@@ -517,31 +552,59 @@
                 Nenhum usuário
                 cadastrado${busca ? " ou encontrado para essa busca" : ""}.
               </div>`}
-              ${usuariosFiltrados.map(
-                (u) => html`
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Usuário #${u.id}</h5>
-                      <p class="card-text">
-                        <strong>Nome:</strong> ${u.nome}<br />
-                        <strong>Email:</strong> ${u.email}
-                      </p>
-                      <button
-                        class="btn btn-warning btn-sm me-2"
-                        onClick=${() => onEdit(u)}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        class="btn btn-danger btn-sm"
-                        onClick=${() => onDelete(u.id)}
-                      >
-                        Excluir
-                      </button>
-                    </div>
-                  </div>
-                `
-              )}
+              ${editing
+                ? usuariosFiltrados
+                    .filter((u) => u.id == form.id)
+                    .map(
+                      (u) => html`
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Usuário #${u.id}</h5>
+                            <p class="card-text">
+                              <strong>Nome:</strong> ${u.nome}<br />
+                              <strong>Email:</strong> ${u.email}
+                            </p>
+                            <button
+                              class="btn btn-warning btn-sm me-2"
+                              onClick=${() => onEdit(u)}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              class="btn btn-danger btn-sm"
+                              onClick=${() => onDelete(u.id)}
+                            >
+                              Excluir
+                            </button>
+                          </div>
+                        </div>
+                      `
+                    )
+                : usuariosFiltrados.map(
+                    (u) => html`
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Usuário #${u.id}</h5>
+                          <p class="card-text">
+                            <strong>Nome:</strong> ${u.nome}<br />
+                            <strong>Email:</strong> ${u.email}
+                          </p>
+                          <button
+                            class="btn btn-warning btn-sm me-2"
+                            onClick=${() => onEdit(u)}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            class="btn btn-danger btn-sm"
+                            onClick=${() => onDelete(u.id)}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </div>
+                    `
+                  )}
             </div>
           </div>
         `;
