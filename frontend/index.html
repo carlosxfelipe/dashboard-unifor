@@ -528,22 +528,20 @@
                   required
                 />
               </div>
-              <div class="col-md-2 d-flex align-items-end">
-                <div class="w-100">
-                  <button type="submit" class="btn btn-primary w-100">
-                    ${editing ? "Salvar" : "Adicionar"}
+              <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-primary">
+                  ${editing ? "Salvar" : "Adicionar"}
+                </button>
+                ${editing &&
+                html`
+                  <button
+                    type="button"
+                    class="btn btn-secondary ms-2"
+                    onClick=${onCancel}
+                  >
+                    Cancelar
                   </button>
-                  ${editing &&
-                  html`
-                    <button
-                      type="button"
-                      class="btn btn-secondary w-100 mt-2"
-                      onClick=${onCancel}
-                    >
-                      Cancelar
-                    </button>
-                  `}
-                </div>
+                `}
               </div>
             </form>
             <div>
