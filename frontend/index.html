@@ -32,16 +32,21 @@
       const { useState, useEffect } = window.preactHooks;
       const html = window.htm.bind(h);
 
+      const API_URL =
+        location.hostname === "localhost"
+          ? "http://localhost:3001"
+          : "https://dashboard-unifor.onrender.com";
+
       async function fetchUsuarios() {
-        const r = await fetch("http://localhost:3001/usuarios");
+        const r = await fetch(`${API_URL}/usuarios`);
         return await r.json();
       }
       async function fetchAgendamentos() {
-        const r = await fetch("http://localhost:3001/agendamentos");
+        const r = await fetch(`${API_URL}/agendamentos`);
         return await r.json();
       }
       async function adicionarUsuario(usuario) {
-        const r = await fetch("http://localhost:3001/usuarios", {
+        const r = await fetch(`${API_URL}/usuarios`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(usuario),
@@ -49,7 +54,7 @@
         return await r.json();
       }
       async function editarUsuario(id, usuario) {
-        const r = await fetch(`http://localhost:3001/usuarios/${id}`, {
+        const r = await fetch(`${API_URL}/usuarios/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(usuario),
@@ -57,12 +62,12 @@
         return await r.json();
       }
       async function excluirUsuario(id) {
-        await fetch(`http://localhost:3001/usuarios/${id}`, {
+        await fetch(`${API_URL}/usuarios/${id}`, {
           method: "DELETE",
         });
       }
       async function adicionarAgendamento(agendamento) {
-        const r = await fetch("http://localhost:3001/agendamentos", {
+        const r = await fetch(`${API_URL}/agendamentos`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(agendamento),
@@ -70,7 +75,7 @@
         return await r.json();
       }
       async function editarAgendamento(id, agendamento) {
-        const r = await fetch(`http://localhost:3001/agendamentos/${id}`, {
+        const r = await fetch(`${API_URL}/agendamentos/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(agendamento),
@@ -78,7 +83,7 @@
         return await r.json();
       }
       async function excluirAgendamento(id) {
-        await fetch(`http://localhost:3001/agendamentos/${id}`, {
+        await fetch(`${API_URL}/agendamentos/${id}`, {
           method: "DELETE",
         });
       }
