@@ -373,6 +373,7 @@
 
       function Usuarios({ usuarios, setUsuarios, setAgendamentos }) {
         const [form, setForm] = useState({ id: "", nome: "", email: "" });
+        const [busca, setBusca] = useState("");
         const editing = form.id !== "";
         function onInput(e) {
           const { name, value } = e.target;
@@ -413,9 +414,25 @@
           }
           setForm({ id: "", nome: "", email: "" });
         }
+        const usuariosFiltrados = usuarios.filter(
+          (u) =>
+            u.nome.toLowerCase().includes(busca.toLowerCase()) ||
+            u.email.toLowerCase().includes(busca.toLowerCase())
+        );
         return html`
           <div class="container mt-4">
             <h2>Usuários</h2>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Buscar por nome ou e-mail..."
+                  value=${busca}
+                  onInput=${(e) => setBusca(e.target.value)}
+                />
+              </div>
+            </div>
             <form class="row g-2 mb-3" onSubmit=${onSubmit}>
               <input type="hidden" name="id" value=${form.id} />
               <div class="col-md-5">
@@ -459,11 +476,12 @@
               </div>
             </form>
             <div>
-              ${usuarios.length === 0 &&
+              ${usuariosFiltrados.length === 0 &&
               html`<div class="alert alert-warning">
-                Nenhum usuário cadastrado.
+                Nenhum usuário
+                cadastrado${busca ? " ou encontrado para essa busca" : ""}.
               </div>`}
-              ${usuarios.map(
+              ${usuariosFiltrados.map(
                 (u) => html`
                   <div class="card">
                     <div class="card-body">
