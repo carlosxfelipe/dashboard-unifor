@@ -31,11 +31,11 @@ async function seedIfNeeded() {
       "INSERT INTO usuarios (nome, email) VALUES (?, ?), (?, ?), (?, ?)",
       [
         "Fulano",
-        "fulano@example.com",
-        "Ciclano",
-        "ciclano@example.com",
+        "fulano@edu.unifor.br",
         "Beltrano",
-        "beltrano@example.com",
+        "beltrano@edu.unifor.br",
+        "Sicrano",
+        "sicrano@edu.unifor.br",
       ]
     );
     await client.execute(
