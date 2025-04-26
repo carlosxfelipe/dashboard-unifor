@@ -225,9 +225,24 @@
         function onEdit(a) {
           setForm({ ...a });
         }
-        async function onDelete(id) {
-          await excluirAgendamento(id);
-          setAgendamentos((ags) => ags.filter((a) => a.id !== id));
+        // async function onDelete(id) {
+        //   await excluirAgendamento(id);
+        //   setAgendamentos((ags) => ags.filter((a) => a.id !== id));
+        // }
+        function onDelete(id) {
+          window._deleteAgendamentoId = id;
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmModal")
+          );
+          modal.show();
+          const btn = document.getElementById("confirmDeleteBtn");
+          btn.onclick = async function () {
+            await excluirAgendamento(window._deleteAgendamentoId);
+            setAgendamentos((ags) =>
+              ags.filter((a) => a.id !== window._deleteAgendamentoId)
+            );
+            modal.hide();
+          };
         }
         function onCancel() {
           setForm({
@@ -453,11 +468,31 @@
         function onEdit(u) {
           setForm({ ...u });
         }
-        async function onDelete(id) {
-          await excluirUsuario(id);
-          setUsuarios((us) => us.filter((u) => u.id !== id));
-          setAgendamentos((ags) => ags.filter((a) => a.usuarioId !== id));
-          if (form.id == id) setForm({ id: "", nome: "", email: "" });
+        // async function onDelete(id) {
+        //   await excluirUsuario(id);
+        //   setUsuarios((us) => us.filter((u) => u.id !== id));
+        //   setAgendamentos((ags) => ags.filter((a) => a.usuarioId !== id));
+        //   if (form.id == id) setForm({ id: "", nome: "", email: "" });
+        // }
+        function onDelete(id) {
+          window._deleteUsuarioId = id;
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmModal")
+          );
+          modal.show();
+          const btn = document.getElementById("confirmDeleteBtn");
+          btn.onclick = async function () {
+            await excluirUsuario(window._deleteUsuarioId);
+            setUsuarios((us) =>
+              us.filter((u) => u.id !== window._deleteUsuarioId)
+            );
+            setAgendamentos((ags) =>
+              ags.filter((a) => a.usuarioId !== window._deleteUsuarioId)
+            );
+            if (form.id == window._deleteUsuarioId)
+              setForm({ id: "", nome: "", email: "" });
+            modal.hide();
+          };
         }
         function onCancel() {
           setForm({ id: "", nome: "", email: "" });
@@ -641,5 +676,34 @@
       }
       render(h(App), document.getElementById("app"));
     </script>
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmar Exclusão</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Tem certeza que deseja excluir este item?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
