@@ -159,44 +159,108 @@
         `;
       }
 
-      function Dashboard({ agendamentos, usuarios }) {
-        const ativos = agendamentos.filter((a) => a.status === "ativo").length;
-        const concluidos = agendamentos.filter(
-          (a) => a.status === "concluido"
-        ).length;
-        const cancelados = agendamentos.filter(
-          (a) => a.status === "cancelado"
-        ).length;
+      function Dashboard({ agendamentos, usuarios, detailTipo, onCardClick }) {
+        const ativos = agendamentos.filter((a) => a.status === "ativo");
+        const concluidos = agendamentos.filter((a) => a.status === "concluido");
+        const cancelados = agendamentos.filter((a) => a.status === "cancelado");
+        function renderDetail() {
+          if (!detailTipo) return null;
+          if (detailTipo === "usuarios") {
+            return usuarios.length
+              ? html`
+                  <div class="mt-4">
+                    <h5>Usuários Cadastrados</h5>
+                    <ul>
+                      ${usuarios.map(
+                        (u) =>
+                          html`<li><strong>${u.nome}</strong> - ${u.email}</li>`
+                      )}
+                    </ul>
+                  </div>
+                `
+              : html`<div class="mt-4 alert alert-warning">
+                  Nenhum usuário cadastrado.
+                </div>`;
+          }
+          let lista =
+            detailTipo === "ativos"
+              ? ativos
+              : detailTipo === "concluidos"
+              ? concluidos
+              : cancelados;
+          let titulo =
+            detailTipo === "ativos"
+              ? "Agendamentos Ativos"
+              : detailTipo === "concluidos"
+              ? "Agendamentos Concluídos"
+              : "Agendamentos Cancelados";
+          return lista.length
+            ? html`
+                <div class="mt-4">
+                  <h5>${titulo}</h5>
+                  <ul>
+                    ${lista.map(
+                      (a) =>
+                        html`<li>
+                          <strong>#${a.id}</strong> - ${a.data} ${a.hora}
+                          (Usuário:
+                          ${usuarios.find((u) => u.id == a.usuarioId)?.nome ||
+                          "Desconhecido"})
+                        </li>`
+                    )}
+                  </ul>
+                </div>
+              `
+            : html`<div class="mt-4 alert alert-warning">
+                Nenhum ${titulo.toLowerCase()}.
+              </div>`;
+        }
         return html`
           <div class="container mt-4">
             <h2>Dashboard de Agendamento</h2>
             <div class="row">
               <div class="col-12 col-md-6 col-lg-3">
-                <div class="card text-bg-info">
+                <div
+                  class="card text-bg-info"
+                  style="cursor:pointer;"
+                  onClick=${() => onCardClick("ativos")}
+                >
                   <div class="card-header">Ativos</div>
                   <div class="card-body">
-                    <h5 class="card-title">${ativos}</h5>
+                    <h5 class="card-title">${ativos.length}</h5>
                   </div>
                 </div>
               </div>
               <div class="col-12 col-md-6 col-lg-3">
-                <div class="card text-bg-success">
+                <div
+                  class="card text-bg-success"
+                  style="cursor:pointer;"
+                  onClick=${() => onCardClick("concluidos")}
+                >
                   <div class="card-header">Concluídos</div>
                   <div class="card-body">
-                    <h5 class="card-title">${concluidos}</h5>
+                    <h5 class="card-title">${concluidos.length}</h5>
                   </div>
                 </div>
               </div>
               <div class="col-12 col-md-6 col-lg-3">
-                <div class="card text-bg-danger">
+                <div
+                  class="card text-bg-danger"
+                  style="cursor:pointer;"
+                  onClick=${() => onCardClick("cancelados")}
+                >
                   <div class="card-header">Cancelados</div>
                   <div class="card-body">
-                    <h5 class="card-title">${cancelados}</h5>
+                    <h5 class="card-title">${cancelados.length}</h5>
                   </div>
                 </div>
               </div>
               <div class="col-12 col-md-6 col-lg-3">
-                <div class="card text-bg-warning">
+                <div
+                  class="card text-bg-warning"
+                  style="cursor:pointer;"
+                  onClick=${() => onCardClick("usuarios")}
+                >
                   <div class="card-header">Usuários Cadastrados</div>
                   <div class="card-body">
                     <h5 class="card-title">${usuarios.length}</h5>
@@ -204,6 +268,7 @@
                 </div>
               </div>
             </div>
+            ${renderDetail()}
           </div>
         `;
       }
@@ -647,6 +712,7 @@
         const [view, setView] = useState("dashboard");
         const [agendamentos, setAgendamentos] = useState([]);
         const [usuarios, setUsuarios] = useState([]);
+        const [dashboardDetailTipo, setDashboardDetailTipo] = useState("");
         useEffect(() => {
           fetchUsuarios().then(setUsuarios);
           fetchAgendamentos().then(setAgendamentos);
@@ -658,6 +724,8 @@
             html`<${Dashboard}
               agendamentos=${agendamentos}
               usuarios=${usuarios}
+              detailTipo=${dashboardDetailTipo}
+              onCardClick=${setDashboardDetailTipo}
             />`}
             ${view === "agendamentos" &&
             html`<${Agendamentos}
