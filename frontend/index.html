@@ -83,6 +83,13 @@
         });
       }
 
+      function formatarData(data) {
+        if (!data) return "";
+        if (data.includes("/")) return data;
+        const [ano, mes, dia] = data.split("-");
+        return `${dia}/${mes}/${ano}`;
+      }
+
       function Navbar({ onNav, current }) {
         return html`
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -202,8 +209,8 @@
                     ${lista.map(
                       (a) =>
                         html`<li>
-                          <strong>#${a.id}</strong> - ${a.data} ${a.hora}
-                          (Usuário:
+                          <strong>#${a.id}</strong> - ${formatarData(a.data)}
+                          ${" às "} ${a.hora} (Usuário:
                           ${usuarios.find((u) => u.id == a.usuarioId)?.nome ||
                           "Desconhecido"})
                         </li>`
@@ -463,7 +470,9 @@
                           <div class="card-body">
                             <h5 class="card-title">Agendamento #${ag.id}</h5>
                             <p class="card-text">
-                              <strong>Data:</strong> ${ag.data}<br />
+                              <strong>Data:</strong> ${formatarData(
+                                ag.data
+                              )}<br />
                               <strong>Hora:</strong> ${ag.hora}<br />
                               <strong>Status:</strong> ${ag.status}<br />
                               <strong>Usuário:</strong> ${nomeUsuario(
@@ -493,7 +502,9 @@
                         <div class="card-body">
                           <h5 class="card-title">Agendamento #${ag.id}</h5>
                           <p class="card-text">
-                            <strong>Data:</strong> ${ag.data}<br />
+                            <strong>Data:</strong> ${formatarData(
+                              ag.data
+                            )}<br />
                             <strong>Hora:</strong> ${ag.hora}<br />
                             <strong>Status:</strong> ${ag.status}<br />
                             <strong>Usuário:</strong> ${nomeUsuario(
