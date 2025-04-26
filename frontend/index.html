@@ -205,6 +205,7 @@
           status: "ativo",
           usuarioId: "",
         });
+        const [buscaUsuario, setBuscaUsuario] = useState("");
         const editing = form.id !== "";
         function onInput(e) {
           const { name, value } = e.target;
@@ -263,9 +264,30 @@
           const user = usuarios.find((u) => u.id == id);
           return user ? user.nome : "Desconhecido";
         }
+        const agendamentosFiltrados = buscaUsuario.trim()
+          ? agendamentos.filter((ag) => {
+              const usuario = usuarios.find((u) => u.id == ag.usuarioId);
+              return (
+                usuario &&
+                usuario.nome.toLowerCase().includes(buscaUsuario.toLowerCase())
+              );
+            })
+          : agendamentos;
+
         return html`
           <div class="container mt-4">
             <h2>Agendamentos</h2>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Buscar por usuário..."
+                  value=${buscaUsuario}
+                  onInput=${(e) => setBuscaUsuario(e.target.value)}
+                />
+              </div>
+            </div>
             <form class="row g-2 mb-3" onSubmit=${onSubmit}>
               <input type="hidden" name="id" value=${form.id} />
               <div class="col-md-3">
@@ -336,9 +358,12 @@
               </div>
             </form>
             <div>
-              ${agendamentos.length === 0 &&
-              html`<div class="alert alert-warning">Nenhum agendamento.</div>`}
-              ${agendamentos.map(
+              ${agendamentosFiltrados.length === 0 &&
+              html`<div class="alert alert-warning">
+                Nenhum agendamento
+                encontrado${buscaUsuario ? " para essa busca" : ""}.
+              </div>`}
+              ${agendamentosFiltrados.map(
                 (ag) => html`
                   <div class="card">
                     <div class="card-body">
